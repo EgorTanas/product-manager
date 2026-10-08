@@ -25,3 +25,19 @@ export async function createProduct(product) {
 
   return response.json();
 }
+
+export async function updateProduct(id, product) {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(product)
+  });
+
+  if (!response.ok) {
+    throw new Error("Nu s-a putut actualiza produsul.");
+  }
+
+  return response.json();
+}
