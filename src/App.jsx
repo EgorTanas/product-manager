@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import {
   getProducts,
   createProduct,
-  updateProduct
+  updateProduct,
+  deleteProduct
 } from "./services/productService";
 import ProductCard from "./components/ProductCard";
 import ProductForm from "./components/ProductForm";
@@ -47,6 +48,14 @@ function App() {
     );
   }
 
+  async function handleDeleteProduct(id) {
+    await deleteProduct(id);
+
+    setProducts(
+      products.filter((product) => product.id !== id)
+    );
+  }
+
   return (
     <div>
       <h1>Product Manager</h1>
@@ -60,6 +69,7 @@ function App() {
           key={product.id}
           product={product}
           onEdit={handleEditProduct}
+          onDelete={handleDeleteProduct}
         />
       ))}
     </div>
