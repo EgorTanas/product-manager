@@ -10,15 +10,27 @@ import ProductForm from "./components/ProductForm";
 
 function App() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function loadProducts() {
-      const data = await getProducts();
-      setProducts(data.products);
-    }
+  async function loadProducts() {
+    try {
+      setLoading(true);
+      setError(null);
 
-    loadProducts();
-  }, []);
+      const data = await getProducts();
+
+      setProducts(data.products);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  loadProducts();
+}, []);
 
   async function handleAddProduct(product) {
     const newProduct = await createProduct(product);
@@ -61,7 +73,8 @@ function App() {
       <h1>Product Manager</h1>
 
       <ProductForm onAddProduct={handleAddProduct} />
-
+      {loading && <p>Se încarcă produsele...</p>}
+      {error && <p>{error}</p>}
       <h2>Lista produselor</h2>
 
       {products.map((product) => (
